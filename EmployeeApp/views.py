@@ -7,6 +7,8 @@ from django.http.response import JsonResponse
 from .serializers import *
 from .models import *
 
+from django.core.files.storage import default_storage
+
 # Create your views here.
 
 @csrf_exempt
@@ -64,4 +66,14 @@ def employeeApi(request, id=0):
         employee=Employees.objects.get(EmployeeId=id)
         employee.delete()
         return JsonResponse("Deleted Successfully", safe=False) 
+
+"""
+Photos
+"""      
+
+@csrf_exempt
+def saveFile(request):
+    file = request.FILES['file']
+    file_name=default_storage.save(file.name, file)
+    return JsonResponse(file_name, safe=False)          
 
